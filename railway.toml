@@ -1,0 +1,23 @@
+# railway.toml
+
+# نام پروژه شما
+name = "behnoushbotai"
+
+# تنظیمات مربوط به محیط
+[env]
+  # متغیرهای محیطی
+  TELEGRAM_BOT_TOKEN = "8136898238:AAHRrQ-87-9zYy946cnLnmXtLhnzlrmJDDg"
+  OPENAI_API_KEY = "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"
+  GEMINI_API_KEY = "AIzaSyC3dlsPFTT9WeSQiXhlFNViuB8CMdhVttA"
+  ADMIN_USER_ID = "123456789"  # آیدی عددی خود را اینجا قرار دهید
+  RADIO_JAVAN_ACCESS_KEY = "720466:3bb9f3a71ee015a604dd23af3f92c426"
+
+# تنظیمات مربوط به ساخت
+[build]
+  # نوع زبان برنامه‌نویسی
+  command = "pip install -r requirements.txt && python main.py"
+
+# تنظیمات مربوط به استقرار
+[deploy]
+  # نوع استقرار
+  type = "auto" # یا "manual" برای استقرار دستی
