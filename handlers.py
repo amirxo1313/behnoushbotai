@@ -1,7 +1,7 @@
 # handlers.py
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
-from ai_responses import get_ai_response, get_joke, get_supportive_message
+from ai_responses import get_ai_response, get_joke, get_supportive_message, search_music
 import requests
 from config import MUSIC_API_BASE_URL, MOVIE_API_BASE_URL
 
@@ -114,3 +114,23 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     elif data.startswith("download_movie_"):
         movie_id = data.replace("download_movie_", "")
         await query.edit_message_text(f"بهنوش عزیزم، لینک دانلود فیلم با ID: {movie_id} به زودی برایت ارسال می‌شود. 🎬")
+
+# =========== قسمت جدید (دستورات help و song) ===========
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(
+        "دستورات ربات:\n"
+        "/start - شروع\n"
+        "/help - راهنما\n"
+        "/search [نام آهنگ/فیلم] - جستجوی آهنگ یا فیلم\n"
+        "/song [نام آهنگ] - جستجوی فقط آهنگ\n"
+        "همچنین می‌توانی هر وقت دوست داشتی با من صحبت کنی یا جوک بخواهی! 😊"
+    )
+
+async def song_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = " ".join(context.args)
+    if not query:
+        await update.message.reply_text("لطفاً بعد از دستور /song نام آهنگ را وارد کن.")
+        return
+    response = search_music(query)
+    await update.message.reply_text(response)
