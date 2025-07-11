@@ -1,7 +1,8 @@
 # ai_responses.py
 import openai
 import google.generativeai as genai
-from config import OPENAI_API_KEY, GEMINI_API_KEY
+from config import OPENAI_API_KEY, GEMINI_API_KEY, RADIO_JAVAN_ACCESS_KEY
+import requests
 
 # Configure OpenAI
 openai.api_key = OPENAI_API_KEY
@@ -27,6 +28,37 @@ def get_ai_response(user_message: str, user_id: int) -> str:
     except Exception as e:
         print(f"OpenAI Error: {e}")
         return "بهنوش جان، متاسفانه الان نمی‌تونم بهت پاسخ بدم. یه مشکل کوچیک پیش اومده. 😔"
+
+def search_music(query: str) -> str:
+    """Search for music using Radio Javan API."""
+    API_URL = "https://api.ineo-team.ir/rj.php"
+    params = {
+        'accessKey': RADIO_JAVAN_ACCESS_KEY,
+        'action': 'search',
+        'query': query
+    }
+    
+    try:
+        response = requests.post(API_URL, data=params)
+        result = response.json()
+        
+        if result['status_code'] == 200:
+            music_results = result['result']
+            if music_results:
+                response_text = "نتایج جستجو:\n"
+                for i, music in enumerate(music_results[:3]):  # Limit to 3 results
+                    title = music.get('title', 'Unknown Title')
+                    artist = music.get('artist', 'Unknown Artist')
+                    response_text += f"{i + 1}. {title} - {artist}\n"
+                return response_text
+            else:
+                return "متاسفانه هیچ نتیجه‌ای پیدا نشد."
+        else:
+            return "بهنوش جان، متاسفانه در جستجو مشکلی پیش آمده است."
+
+    except Exception as e:
+        print(f"Radio Javan API Error: {e}")
+        return "بهنوش جان، متاسفانه در حال حاضر نمی‌تونم بهت کمک کنم. لطفا بعدا امتحان کن."
 
 def get_joke() -> str:
     """Generates a joke using OpenAI or a predefined list."""
