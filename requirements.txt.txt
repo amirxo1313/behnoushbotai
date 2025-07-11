@@ -1,0 +1,5 @@
+python-telegram-bot
+openai
+google-generativeai
+requests
+psycopg2-binary
