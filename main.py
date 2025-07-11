@@ -2,7 +2,7 @@
 import logging
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from config import TELEGRAM_BOT_TOKEN
-from handlers import start, handle_message, search_music_movie, button_callback
+from handlers import start, handle_message, search_music_movie, button_callback, help_command, song_command
 from db_manager import init_db
 
 # Enable logging
@@ -20,6 +20,8 @@ def main():
     # Command handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("search", search_music_movie))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("song", song_command))
 
     # Message handler (for general text messages)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
